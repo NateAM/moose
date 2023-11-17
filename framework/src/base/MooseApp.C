@@ -1948,6 +1948,7 @@ MooseApp::dynamicAppRegistration(const std::string & app_name,
   }
 
 #else
+  libmesh_ignore(app_name, library_path, library_name, lib_load_deps);
   mooseError("Dynamic Loading is either not supported or was not detected by libMesh configure.");
 #endif
 }
@@ -1976,6 +1977,7 @@ MooseApp::dynamicAllRegistration(const std::string & app_name,
 
   dynamicRegistration(params);
 #else
+  libmesh_ignore(app_name, factory, action_factory, syntax, library_path, library_name);
   mooseError("Dynamic Loading is either not supported or was not detected by libMesh configure.");
 #endif
 }
@@ -2124,7 +2126,7 @@ MooseApp::loadLibraryAndDependencies(const std::string & library_filename,
     else
     {
 
-#ifdef DEBUG
+#if defined(DEBUG) && defined(LIBMESH_HAVE_DLOPEN)
       // We found a dynamic library that doesn't have a dynamic
       // registration method in it. This shouldn't be an error, so
       // we'll just move on.
@@ -2427,8 +2429,7 @@ MooseApp::removeRelationshipManager(std::shared_ptr<RelationshipManager> rm)
     if (undisp_clone)
     {
       problem.removeAlgebraicGhostingFunctor(*undisp_clone);
-      auto & dof_map = problem.getNonlinearSystemBase().dofMap();
-      dof_map.remove_coupling_functor(*undisp_clone);
+      problem.removeCouplingGhostingFunctor(*undisp_clone);
     }
 
     auto * dp = problem.getDisplacedProblem().get();

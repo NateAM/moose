@@ -19,6 +19,7 @@
 // libMesh includes
 #include "libmesh/cell_tet4.h"
 #include "libmesh/cell_tet10.h"
+#include "libmesh/cell_tet14.h"
 #include "libmesh/cell_hex8.h"
 #include "libmesh/cell_hex20.h"
 #include "libmesh/cell_hex27.h"
@@ -213,6 +214,15 @@ TraceRay::exitsElem(const Elem * elem,
       break;
     case TET10:
       intersected = exitsElem<Tet10, Tet4>(elem,
+                                           incoming_side,
+                                           intersection_point,
+                                           intersected_side,
+                                           intersected_extrema,
+                                           intersection_distance,
+                                           normals);
+      break;
+    case TET14:
+      intersected = exitsElem<Tet14, Tet4>(elem,
                                            incoming_side,
                                            intersection_point,
                                            intersected_side,
@@ -1602,6 +1612,9 @@ TraceRay::trace(const std::shared_ptr<Ray> & ray)
 void
 TraceRay::onCompleteTrace(const std::shared_ptr<Ray> & ray)
 {
+  for (RayKernelBase * rk : _study.currentRayKernels(_tid))
+    rk->postTrace();
+
   debugRay("Called onCompleteTrace()\n", (*_current_ray)->getInfo());
   if (_intersection_distance > 0)
     possiblyAddDebugRayMeshPoint(_incoming_point, _intersection_point);

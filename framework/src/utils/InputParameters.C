@@ -1252,6 +1252,15 @@ InputParameters::getGroupParameters(const std::string & group) const
 }
 
 std::set<std::string>
+InputParameters::getParametersList() const
+{
+  std::set<std::string> param_set;
+  for (auto it = _params.begin(); it != _params.end(); ++it)
+    param_set.emplace(it->first);
+  return param_set;
+}
+
+std::set<std::string>
 InputParameters::getControllableParameters() const
 {
   std::set<std::string> controllable;
@@ -1316,6 +1325,8 @@ InputParameters::renameParamInternal(const std::string & old_name,
   auto new_metadata = std::move(params_it->second);
   if (!docstring.empty())
     new_metadata._doc_string = docstring;
+  else
+    new_metadata._doc_string = params_it->second._doc_string;
   _params.emplace(new_name, std::move(new_metadata));
   _params.erase(params_it);
 

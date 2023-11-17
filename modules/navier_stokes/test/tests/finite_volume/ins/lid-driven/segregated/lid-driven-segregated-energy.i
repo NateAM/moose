@@ -25,8 +25,8 @@ pressure_tag = "pressure_grad"
     xmax = 1
     ymin = 0
     ymax = 1
-    nx = 20
-    ny = 20
+    nx = 10
+    ny = 10
   []
 []
 
@@ -219,7 +219,7 @@ pressure_tag = "pressure_grad"
 
 [Materials]
   [ins_fv]
-    type = INSFVEnthalpyMaterial
+    type = INSFVEnthalpyFunctorMaterial
     temperature = 'T_fluid'
     rho = ${rho}
     cp = ${cp}

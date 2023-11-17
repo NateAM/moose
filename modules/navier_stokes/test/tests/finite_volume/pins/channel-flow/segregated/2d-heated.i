@@ -15,7 +15,7 @@ pressure_tag = "pressure_grad"
     dim = 2
     dx = '5 5'
     dy = '1.0'
-    ix = '20 20'
+    ix = '10 10'
     iy = '5'
     subdomain_id = '1 2'
   []
@@ -259,7 +259,7 @@ pressure_tag = "pressure_grad"
     prop_values = '0.1 ${cp}'
   []
   [ins_fv]
-    type = INSFVEnthalpyMaterial
+    type = INSFVEnthalpyFunctorMaterial
     rho = ${rho}
     temperature = 'T_fluid'
   []
